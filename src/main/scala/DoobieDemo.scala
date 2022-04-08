@@ -1,5 +1,4 @@
 import cats.effect.{ExitCode, IO, IOApp}
-import com.sun.xml.internal.bind.v2.model.core.ID
 import doobie.{Fragment, HC, HPS}
 import doobie.util.transactor.Transactor
 import doobie.implicits._
@@ -88,12 +87,21 @@ object DoobieDemo extends IOApp{
       .as(ExitCode.Success)
 
     val res = for {
-     findActorById <- findActorByIdProgram(1)
-      findActorByIdOption <- findActorByIdProgramOption(10)
+      findAllActors <- findAllActorsNamesProgram
+      allActorsIdsandNames  <- findAllActorsIdsAndNamesProgram
+      actorById <- findActorByIdProgram(1)
+      actorByIdOption <- findActorByIdProgramOption(10)
+      actorByNameUsingHC <- findActorByNameUsingHCProgram("Utkarsha1")
+       saveAndGet<- saveAndGetActorProgram("Utkarsha1")
     } yield {
-      println("actor by id  --- "+findActorById)
-      println("actor by id option --- "+findActorByIdOption)
-      findActorById
+      println("find all actors" + findAllActors)
+      println("findAllActorsIdsAndNamesProgram ---" + findAllActorsIdsAndNamesProgram  )
+      println("actor by id  --- "+actorById)
+      println("actor by id option --- "+actorByIdOption)
+      println("actor by name using hc --- "+actorByNameUsingHC)
+      println("save and get --- "+ saveAndGet)
+
+      actorById
     }
 
 
