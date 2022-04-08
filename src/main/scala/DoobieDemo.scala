@@ -5,7 +5,7 @@ object DoobieDemo extends IOApp{
 
   val xa = Transactor.fromDriverManager[IO](
     "org.postgresql.Driver",
-    "jdbc:postgresql://10.0.0.40:5432/ifrm", // connect URL
+    "jdbc:postgresql://10.0.0.40:5432/DEMO", // connect URL
     "ifrm", // username
     "ifrm",                         // password
   )
