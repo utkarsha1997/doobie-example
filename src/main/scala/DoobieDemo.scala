@@ -92,7 +92,7 @@ object DoobieDemo extends IOApp{
       actorById <- findActorByIdProgram(1)
       actorByIdOption <- findActorByIdProgramOption(10)
       actorByNameUsingHC <- findActorByNameUsingHCProgram("Utkarsha1")
-       saveAndGet<- saveAndGetActorProgram("Utkarsha1")
+       saveAndGet<- saveAndGetActorProgram("Utkarsha2")
     } yield {
       println("find all actors" + findAllActors)
       println("findAllActorsIdsAndNamesProgram ---" + findAllActorsIdsAndNamesProgram  )
