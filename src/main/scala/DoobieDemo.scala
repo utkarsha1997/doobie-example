@@ -95,7 +95,8 @@ object DoobieDemo extends IOApp{
     saveActorProgram("Utkarsha").map(res => println("save actor  --- "+res))
       .as(ExitCode.Success)
 
-
+    saveAndGetActorProgram("Utkarsha1").map(res => println("save actor and get actor  --- "+res))
+      .as(ExitCode.Success)
 
   }
 }
