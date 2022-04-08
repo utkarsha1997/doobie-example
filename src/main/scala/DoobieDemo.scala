@@ -1,4 +1,5 @@
 import cats.effect.{ExitCode, IO, IOApp}
+import com.sun.xml.internal.bind.v2.model.core.ID
 import doobie.{Fragment, HC, HPS}
 import doobie.util.transactor.Transactor
 import doobie.implicits._
@@ -22,13 +23,13 @@ object DoobieDemo extends IOApp{
  // single row
   def findActorByIdProgram(id: Int): IO[Actor] = {
     val findActorById: doobie.ConnectionIO[Actor] =
-      sql"select id, name from actors where id = $id".query[Actor].unique
+      sql"""select "ID", "NAME" from "DEMO"."ACTORS" where "ID" = $id""".query[Actor].unique
     findActorById.transact(xa)
   }
 
   // multiple rows
   def findAllActorsIdsAndNamesProgram: IO[List[(Int, String)]] = {
-    val query: doobie.Query0[(Int, String)] = sql"select id, name from actors".query[(Int, String)]
+    val query: doobie.Query0[(Int, String)] = sql"""select "ID", "NAME" from "DEMO"."ACTORS"""".query[(Int, String)]
     val findAllActors: doobie.ConnectionIO[List[(Int, String)]] = query.to[List]
     findAllActors.transact(xa)
   }
@@ -36,13 +37,13 @@ object DoobieDemo extends IOApp{
 // option
   def findActorByIdProgramOption(id: Int): IO[Option[Actor]] = {
     val findActorById: doobie.ConnectionIO[Option[Actor]] =
-      sql"select id, name from actors where id = $id".query[Actor].option
+      sql"""select "ID", "NAME" from "DEMO"."ACTORS" where "ID" = $id""".query[Actor].option
     findActorById.transact(xa)
   }
 
   // HC
   def findActorByNameUsingHCProgram(actorName: String): IO[Option[Actor]] = {
-    val query = "select id, name from actors where name = ?"
+    val query = """select "ID", "NAME" from "DEMO"."ACTORS" where "NAME" = ?"""
     HC.stream[Actor](
       query,
       HPS.set(actorName),   // Parameters start from index 1 by default
@@ -56,9 +57,9 @@ object DoobieDemo extends IOApp{
  // fragment
 
   def findActorsByInitialLetterUsingFragmentsProgram(initialLetter: String): IO[List[Actor]] = {
-    val select: Fragment = fr"select id, name"
-    val from: Fragment = fr"from actors"
-    val where: Fragment = fr"where LEFT(name, 1) = $initialLetter"
+    val select: Fragment = fr"""select "ID", "NAME""""
+    val from: Fragment = fr"""from "DEMO"."ACTORS""""
+    val where: Fragment = fr"""where LEFT("NAME", 1) = $initialLetter"""
 
     val statement = select ++ from ++ where
 
@@ -68,15 +69,15 @@ object DoobieDemo extends IOApp{
  // insert a row
   def saveActorProgram(name: String): IO[Int] = {
     val saveActor: doobie.ConnectionIO[Int] =
-      sql"insert into actors (name) values ($name)".update.run
+      sql"""insert into "DEMO"."ACTORS" ("NAME") values ($name)""".update.run
     saveActor.transact(xa)
   }
 
   // for comprehension
   def saveAndGetActorProgram(name: String): IO[Actor] = {
     val retrievedActor = for {
-      id <- sql"insert into actors (name) values ($name)".update.withUniqueGeneratedKeys[Int]("id")
-      actor <- sql"select * from actors where id = $id".query[Actor].unique
+      id <- sql"""insert into "DEMO"."ACTORS" ("NAME") values ($name)""".update.withUniqueGeneratedKeys[Int]("ID")
+      actor <- sql"""select * from "DEMO"."ACTORS" where "ID" = $id""".query[Actor].unique
     } yield actor
     retrievedActor.transact(xa)
   }
