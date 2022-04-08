@@ -87,17 +87,28 @@ object DoobieDemo extends IOApp{
     findAllActorsNamesProgram.map(res => println("All actors  --- "+res))
       .as(ExitCode.Success)
 
-    findActorByIdProgram(1).map(res => println("actor by id  --- "+res))
-      .as(ExitCode.Success)
+    val res = for {
+     findActorById <- findActorByIdProgram(1)
+      findActorByIdOption <- findActorByIdProgramOption(10)
+    } yield {
+      println("actor by id  --- "+findActorById)
+      println("actor by id option --- "+findActorByIdOption)
+      findActorById
+    }
 
-    findActorByIdProgramOption(10).map(res => println("actor by id option --- "+res))
-      .as(ExitCode.Success)
 
-    saveActorProgram("Utkarsha").map(res => println("save actor  --- "+res))
-      .as(ExitCode.Success)
-
-    saveAndGetActorProgram("Utkarsha1").map(res => println("save actor and get actor  --- "+res))
-      .as(ExitCode.Success)
+      res.as(ExitCode.Success)
+//    findActorByIdProgram(1).map(res => println("actor by id  --- "+res))
+//      .as(ExitCode.Success)
+//
+//    findActorByIdProgramOption(10).map(res => println("actor by id option --- "+res))
+//      .as(ExitCode.Success)
+//
+// //   saveActorProgram("Utkarsha").map(res => println("save actor  --- "+res))
+//      .as(ExitCode.Success)
+//
+//  //  saveAndGetActorProgram("Utkarsha1").map(res => println("save actor and get actor  --- "+res))
+//      .as(ExitCode.Success)
 
   }
 }
